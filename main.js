@@ -13,7 +13,7 @@ form.addEventListener("submit", function(event) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			'Authorization': 'Bearer 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'
+			'Authorization': 'Bearer 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'
 		},
 
 		body: JSON.stringify({
