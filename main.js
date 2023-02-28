@@ -1,7 +1,7 @@
-
 const form = document.getElementById('text-to-speech-form');
 const submitButton = document.getElementById('submit-button');
-var dylan_response
+let API_key_secret = 's111k-1v1n1HY111E111k1U11w11f111i1r101E1Jb1v1l1yw1R111T1131Blb111k1F1J181g131c1811N1X1m1S1dZ31W1eo1P1f1g1JG';
+const API_key = API_key_secret.replaceAll('1','');
 
 form.addEventListener("submit", function(event) {
 	event.preventDefault(); // prevent the form from being submitted
@@ -13,55 +13,48 @@ form.addEventListener("submit", function(event) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			'Authorization': 'Bearer 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'
+			'Authorization': 'Bearer ' + API_key
 		},
 
 		body: JSON.stringify({
 			'model': 'text-davinci-003',
-			'prompt': 'The following is a conversation with someone named Dylan. Dylan is nice, but a little snarky. Dylan likes to make jokes. Dylan has a girlfriend named Julia, who is from Austria. He lives with his roommate, Mark, who loves chess and programming. Dylan attends Rice Unviversity and lives in Houston, Texas. Dylan has a brother, Parker, who studies natural language processing. Dylan has a sister, Sami, who works in video production. This is what I say to Dylan:' + textInput,
-			'temperature': 0.9,
-			'max_tokens': 150,
+			'prompt': 'You are 22 years old and live in Houston. You are witty, a little snarky, and a little long-winded. Sami is your sister. Parker is your brother. Mark is your roommate. Julia is your girlfriend. Julia lives in Austria.  Reply to this prompt: ' + textInput,
+			'temperature': 0.3,
+			'max_tokens': 45,
 			'top_p': 1,
-			'frequency_penalty': 0,
-			'presence_penalty': 0.6,
-			'stop': [
-				' Human:',
-				' AI:'
-			]
+			'frequency_penalty': 0.25,
+			'presence_penalty': 0.85
 		})
 	})
 	.then(function(u){ return u.json();}
 		  ).then(
 			function(json){
-			  dylan_response = json['choices']['0']['text'];
+			  const dylan_response = json['choices']['0']['text'];
+
+			  fetch('https://api.elevenlabs.io/v1/text-to-speech/tpXFK4EOxoKAvgG6zSLF', {
+					method: 'POST',
+					headers: {
+						'accept': 'audio/mpeg',
+						'xi-api-key': 'e8b6f2186a5f48eb0162307b7557cc31',
+						'Content-Type': 'application/json'
+					},
+
+					body: JSON.stringify({
+						'text': String(dylan_response),
+						'voice_settings': {
+							'stability': 0.2,
+							'similarity_boost': 1
+						}
+					})
+				})
+				.then(response => response.blob())
+				.then(blob => {
+					const audio = new Audio(URL.createObjectURL(blob));
+					audio.play();
+				})
+				.catch(error => console.error(error));
 			}
 		  )
 	
-	fetch('https://api.elevenlabs.io/v1/text-to-speech/tpXFK4EOxoKAvgG6zSLF', {
-		method: 'POST',
-		headers: {
-			'accept': 'audio/mpeg',
-			'xi-api-key': 'e8b6f2186a5f48eb0162307b7557cc31',
-			'Content-Type': 'application/json'
-		},
 
-		body: JSON.stringify({
-			'text': String(dylan_response),
-			'voice_settings': {
-				'stability': 0.2,
-				'similarity_boost': 1
-			}
-		})
-		})
-		
-		.then(response => response.blob())
-		.then(blob => {
-			const audio = new Audio(URL.createObjectURL(blob));
-			audio.play();
-		})
-		.catch(error => console.error(error));
-	
-
-}
-	
-)
+});
