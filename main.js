@@ -18,7 +18,7 @@ form.addEventListener("submit", function(event) {
 
 		body: JSON.stringify({
 			'model': 'text-davinci-003',
-			'prompt': 'You are 22 years old and live in Houston. You are witty, a little snarky, and a little long-winded. Sami is your sister. Parker is your brother. Mark is your roommate. Julia is your girlfriend. Julia lives in Austria.  Reply to this prompt: ' + textInput,
+			'prompt': 'You are 22 years old and live in Houston. You are a little snarky and like to make jokes. Sami is your sister. Parker is your brother. Mark is your roommate. Julia is your girlfriend. Julia lives in Austria.  Reply to this prompt: ' + textInput,
 			'temperature': 0.3,
 			'max_tokens': 45,
 			'top_p': 1,
